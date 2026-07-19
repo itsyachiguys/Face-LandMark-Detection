@@ -11,9 +11,19 @@ from app.transforms import get_train_transforms
 
 
 class FaceLandmarkDataset(Dataset):
-    def __init__(self, xml_file, root_dir="data", image_size=224):
+    def __init__(
+        self,
+        xml_file,
+        root_dir="data",
+        image_size=224,
+        transform=None,
+    ):
         self.root_dir = root_dir
-        self.transform = get_train_transforms(image_size)
+
+        if transform is None:
+            transform = get_train_transforms(image_size)
+
+        self.transform = transform
 
         self.image_paths = []
         self.landmarks = []
