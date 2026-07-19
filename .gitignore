@@ -1,0 +1,24 @@
+# Virtual Environment
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model weights
+*.pth
+
+# Dataset
+data/
+
+# Outputs
+outputs/
+
+# VS Code
+.vscode/
+
+# Antigravity (if it creates workspace settings)
+.idea/

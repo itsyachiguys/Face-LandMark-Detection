@@ -4,7 +4,8 @@ opencv-python
 numpy
 matplotlib
 Pillow
+albumentations
+tqdm
+lxml
 scikit-image
 imutils
-lxml
-tqdm
