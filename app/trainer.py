@@ -114,4 +114,7 @@ class Trainer:
                 self.checkpoint_dir / "best_model.pth",
             )
 
-            print("✔ Best model saved.")
+            print(
+                f"✔ Best model saved "
+                f"(Validation Loss = {val_loss:.6f})"
+            )
