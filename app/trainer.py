@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import torch
 from tqdm import tqdm
 
@@ -29,6 +30,9 @@ class Trainer:
 
         self.best_loss = float("inf")
 
+        self.train_losses = []
+        self.val_losses = []
+
         self.checkpoint_dir = Path(checkpoint_dir)
 
         self.checkpoint_dir.mkdir(
@@ -40,7 +44,7 @@ class Trainer:
 
         self.model.train()
 
-        running_loss = 0
+        running_loss = 0.0
 
         progress = tqdm(
             self.train_loader,
@@ -71,14 +75,18 @@ class Trainer:
                 loss=f"{loss.item():.5f}"
             )
 
-        return running_loss / len(self.train_loader)
+        epoch_loss = running_loss / len(self.train_loader)
+
+        self.train_losses.append(epoch_loss)
+
+        return epoch_loss
 
     @torch.no_grad()
     def validate(self):
 
         self.model.eval()
 
-        running_loss = 0
+        running_loss = 0.0
 
         for images, landmarks in self.val_loader:
 
@@ -94,7 +102,11 @@ class Trainer:
 
             running_loss += loss.item()
 
-        return running_loss / len(self.val_loader)
+        epoch_loss = running_loss / len(self.val_loader)
+
+        self.val_losses.append(epoch_loss)
+
+        return epoch_loss
 
     def save_best(self, epoch, val_loss):
 
@@ -118,3 +130,45 @@ class Trainer:
                 f"✔ Best model saved "
                 f"(Validation Loss = {val_loss:.6f})"
             )
+
+        self.plot_losses()
+
+    def plot_losses(self):
+
+        if len(self.train_losses) == 0:
+            return
+
+        output_dir = Path("outputs")
+        output_dir.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        plt.figure(figsize=(8, 5))
+
+        plt.plot(
+            self.train_losses,
+            label="Training Loss",
+            linewidth=2,
+        )
+
+        plt.plot(
+            self.val_losses,
+            label="Validation Loss",
+            linewidth=2,
+        )
+
+        plt.title("Training vs Validation Loss")
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+
+        plt.grid(True)
+        plt.legend()
+
+        plt.savefig(
+            output_dir / "loss_curve.png",
+            dpi=300,
+            bbox_inches="tight",
+        )
+
+        plt.close()
