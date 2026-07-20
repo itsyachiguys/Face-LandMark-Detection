@@ -79,14 +79,11 @@ def train():
         checkpoint_dir=CHECKPOINT_DIR,
     )
 
-    history = {
-        "train_loss": [],
-        "val_loss": [],
-    }
-
     for epoch in range(EPOCHS):
 
-        print(f"\nEpoch {epoch+1}/{EPOCHS}")
+        print("=" * 50)
+        print(f"Epoch {epoch + 1}/{EPOCHS}")
+        print("=" * 50)
 
         train_loss = trainer.train_epoch()
 
@@ -94,20 +91,16 @@ def train():
 
         scheduler.step(val_loss)
 
-        trainer.save_best(epoch + 1, val_loss)
-
-        history["train_loss"].append(train_loss)
-        history["val_loss"].append(val_loss)
-
-        print(
-            f"Train Loss : {train_loss:.6f}"
+        trainer.save_best(
+            epoch=epoch + 1,
+            val_loss=val_loss,
         )
 
-        print(
-            f"Val Loss   : {val_loss:.6f}"
-        )
+        print(f"Train Loss : {train_loss:.6f}")
+        print(f"Val Loss   : {val_loss:.6f}")
 
-    return history
+    print("\nTraining Finished!")
+    print(f"Best Validation Loss : {trainer.best_loss:.6f}")
 
 
 if __name__ == "__main__":
