@@ -1,24 +1,62 @@
-# Virtual Environment
-.venv/
-
+# ==========================
 # Python
+# ==========================
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Jupyter
-.ipynb_checkpoints/
-
-# Model weights
-*.pth
-
+# =========================
 # Dataset
 data/
+# ===========================
 
-# Outputs
-outputs/
+# ==========================
+# Virtual Environments
+# ==========================
+.venv/
+venv/
+env/
 
-# VS Code
+# ==========================
+# IDEs
+# ==========================
 .vscode/
-
-# Antigravity (if it creates workspace settings)
 .idea/
+
+# ==========================
+# Jupyter
+# ==========================
+.ipynb_checkpoints/
+
+# ==========================
+# Build
+# ==========================
+build/
+dist/
+*.egg-info/
+
+# ==========================
+# OS Files
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# Generated Outputs
+# ==========================
+outputs/*.mp4
+outputs/*.avi
+
+# Keep PNG outputs
+!outputs/loss_curve.png
+!outputs/prediction.png
+
+# ==========================
+# Keep trained model
+# ==========================
+# models/checkpoints/best_model.pth
