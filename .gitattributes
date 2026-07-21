@@ -1,0 +1,15 @@
+# Auto detect text files
+* text=auto
+# Python
+*.py text
+# Markdown
+*.md text
+# XML
+*.xml text
+# Landmark files
+*.pts text
+# Images
+*.jpg binary
+*.png binary
+# Models
+*.pth filter=lfs diff=lfs merge=lfs -text
