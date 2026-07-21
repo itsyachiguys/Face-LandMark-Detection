@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import torch
-from PIL import Image
 
 from app.transforms import get_test_transforms
 from models.resnet import FaceLandmarkModel
@@ -27,7 +26,6 @@ class LandmarkPredictor:
         )
 
         self.model.to(self.device)
-
         self.model.eval()
 
         self.transform = get_test_transforms(224)
@@ -35,19 +33,30 @@ class LandmarkPredictor:
     @torch.no_grad()
     def predict(self, face):
 
+        # Convert BGR → Grayscale
         gray = cv2.cvtColor(
             face,
             cv2.COLOR_BGR2GRAY,
         )
 
-        pil = Image.fromarray(gray)
+        # Albumentations expects numpy array
+        transformed = self.transform(
+            image=gray,
+        )
 
-        tensor = self.transform(pil)
+        tensor = transformed["image"]
 
-        tensor = tensor.unsqueeze(0).to(self.device)
+        tensor = tensor.unsqueeze(0).to(
+            self.device
+        )
 
         prediction = self.model(tensor)
 
-        prediction = prediction.squeeze().cpu().numpy()
+        prediction = (
+            prediction
+            .squeeze(0)
+            .cpu()
+            .numpy()
+        )
 
         return prediction
