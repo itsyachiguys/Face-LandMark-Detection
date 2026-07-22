@@ -12,6 +12,7 @@ from app.transforms import (
 from app.trainer import Trainer
 
 from models.resnet import FaceLandmarkModel
+from models.loss import WingLoss
 
 from configs.train_config import *
 
@@ -54,7 +55,7 @@ def train():
 
     model = FaceLandmarkModel()
 
-    criterion = nn.SmoothL1Loss()
+    criterion =  WingLoss()
 
     optimizer = AdamW(
         model.parameters(),
